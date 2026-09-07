@@ -1,0 +1,85 @@
+:root {
+  --bg: #0b0f14;
+  --panel: #121923;
+  --panel-2: #182231;
+  --text: #e6edf3;
+  --muted: #8b98a8;
+  --accent: #f97316;
+  --accent-2: #fb923c;
+  --ok: #22c55e;
+  --warn: #eab308;
+  --bad: #ef4444;
+  --rime: #7c3aed;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: radial-gradient(1200px 600px at 20% -10%, #1a2433 0%, var(--bg) 60%);
+  color: var(--text); min-height: 100vh;
+}
+header { display: flex; align-items: center; justify-content: space-between; padding: 18px 28px; border-bottom: 1px solid #1f2a3a; }
+.brand { display: flex; gap: 14px; align-items: center; }
+.logo { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), #c2410c); display: grid; place-items: center; font-weight: 800; letter-spacing: 1px; }
+h1 { margin: 0; font-size: 20px; }
+header p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.badge { padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; border: 1px solid transparent; }
+.badge-rime { background: rgba(124, 58, 237, 0.18); border-color: var(--rime); color: #d8c7ff; }
+.badge-fallback { background: rgba(234, 179, 8, 0.15); border-color: var(--warn); color: #fde68a; }
+.badge-bad { background: rgba(239, 68, 68, 0.15); border-color: var(--bad); color: #fecaca; }
+.badge-unknown { background: #1f2a3a; color: var(--muted); }
+
+main { display: grid; grid-template-columns: 1.1fr 1.3fr 1fr; gap: 18px; padding: 22px 28px; }
+@media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
+.panel { background: var(--panel); border: 1px solid #1f2a3a; border-radius: 16px; padding: 16px 18px; }
+.panel h2 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); }
+.side { display: flex; flex-direction: column; gap: 14px; }
+
+.stage { display: flex; flex-direction: column; align-items: center; gap: 18px; padding-top: 10px; }
+.orb { width: 190px; height: 190px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 13px; transition: all .25s ease; box-shadow: 0 0 0 0 rgba(249,115,22,0); background: #1b2635; }
+.orb.idle { color: var(--muted); }
+.orb.listening { background: radial-gradient(circle at 30% 30%, #2dd4bf, #0f766e); box-shadow: 0 0 60px rgba(45, 212, 191, 0.35); animation: breathe 2.4s ease-in-out infinite; }
+.orb.thinking { background: radial-gradient(circle at 30% 30%, #a78bfa, #5b21b6); box-shadow: 0 0 60px rgba(167, 139, 250, 0.35); }
+.orb.tool { background: radial-gradient(circle at 30% 30%, #fbbf24, #b45309); box-shadow: 0 0 60px rgba(251, 191, 36, 0.35); animation: spin 1.6s linear infinite; }
+.orb.speaking { background: radial-gradient(circle at 30% 30%, #fb923c, #c2410c); box-shadow: 0 0 80px rgba(249, 115, 22, 0.45); animation: pulse 0.9s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+@keyframes spin { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(40deg); } }
+
+.controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+button { background: var(--panel-2); color: var(--text); border: 1px solid #2a3749; padding: 10px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary { background: var(--accent); border-color: var(--accent-2); color: #111; }
+button.danger { background: #7f1d1d; border-color: #b91c1c; }
+.knob { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; }
+select, input { background: var(--panel-2); color: var(--text); border: 1px solid #2a3749; border-radius: 10px; padding: 9px 12px; }
+.typed { display: flex; gap: 8px; width: 100%; max-width: 520px; }
+.typed input { flex: 1; }
+.hint { color: var(--muted); font-size: 13px; max-width: 520px; text-align: center; line-height: 1.5; }
+
+.transcript { min-height: 420px; }
+#transcript { display: flex; flex-direction: column; gap: 10px; max-height: 60vh; overflow: auto; padding-right: 4px; }
+.msg { padding: 10px 14px; border-radius: 12px; max-width: 92%; line-height: 1.45; font-size: 15px; }
+.msg.user { align-self: flex-end; background: #1e3a5f; }
+.msg.assistant { align-self: flex-start; background: #23303f; }
+.msg.assistant.interrupted { border-left: 3px solid var(--warn); }
+.msg .unheard { text-decoration: line-through; color: var(--muted); }
+.msg .tag { display: block; font-size: 11px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.caption { min-height: 24px; color: var(--muted); font-style: italic; margin-top: 10px; font-size: 14px; }
+
+.metric-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #1f2a3a; font-size: 14px; color: var(--muted); }
+.metric-row b { color: var(--text); font-variant-numeric: tabular-nums; }
+.heard-title { margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+.heard { margin: 0; line-height: 1.5; font-size: 14px; }
+.heard .yes { color: #86efac; }
+.heard .no { color: var(--muted); text-decoration: line-through; }
+.muted { color: var(--muted); }
+
+.tools { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.tools li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--panel-2); }
+.tools .st { font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+.st.running { color: var(--warn); } .st.done { color: var(--ok); } .st.cancelled, .st.fenced, .st.discarded, .st.failed { color: var(--bad); } .st.reconciled { color: #93c5fd; } .st.orphaned { color: #fdba74; }
+
+.config { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: 13px; }
+.config dt { color: var(--muted); } .config dd { margin: 0; word-break: break-all; }
+details summary { cursor: pointer; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); }
+#log { max-height: 260px; overflow: auto; font-size: 11px; color: #a3b1c2; margin: 10px 0 0; white-space: pre-wrap; }

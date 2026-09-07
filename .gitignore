@@ -1,0 +1,27 @@
+# secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+
+# generated evidence (keep committed summaries, ignore bulky raw runs/clips)
+evidence/runs/
+evidence/clips/
+*.wav
+!eval/fixtures/**/*.wav
+
+# editor / os
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ForgeDesk — full-duplex voice front desk</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo">FD</span>
+      <div>
+        <h1>ForgeDesk</h1>
+        <p>Forge Auto Care · voice front desk · full-duplex</p>
+      </div>
+    </div>
+    <div id="provider" class="badge badge-unknown" title="Active speech provider">TTS: connecting…</div>
+  </header>
+
+  <main>
+    <section class="stage">
+      <div id="orb" class="orb idle" data-state="idle"><span id="orb-label">idle</span></div>
+      <div class="controls">
+        <button id="start" class="primary">Start call</button>
+        <button id="interrupt" disabled title="Manual barge-in (same path as talking over the agent)">Interrupt</button>
+        <label class="knob" title="Artificial latency injected into every booking-system call (the stress case)">
+          Tool delay
+          <select id="delay">
+            <option value="0">0 ms</option>
+            <option value="1500">1.5 s</option>
+            <option value="3000">3 s</option>
+            <option value="5000">5 s</option>
+          </select>
+        </label>
+      </div>
+      <form id="typed" class="typed" autocomplete="off">
+        <input id="typed-text" placeholder="Type a turn instead of speaking (accessibility / no-mic testing)…" />
+        <button type="submit">Send</button>
+      </form>
+      <p id="hint" class="hint">Click <b>Start call</b>, then say something like “I need an oil change Tuesday afternoon.” Talk over the agent any time — it stops, remembers exactly what you heard, and continues.</p>
+    </section>
+
+    <section class="panel transcript">
+      <h2>Conversation</h2>
+      <div id="transcript"></div>
+      <div id="caption" class="caption"></div>
+    </section>
+
+    <aside class="side">
+      <div class="panel">
+        <h2>Last interruption</h2>
+        <div class="metric-row"><span>Barge-in → audio stopped</span><b id="m-stop">–</b></div>
+        <div class="metric-row"><span>Client flush ack</span><b id="m-ack">–</b></div>
+        <div class="metric-row"><span>Alignment</span><b id="m-align">–</b></div>
+        <p class="heard-title">What you actually heard</p>
+        <p id="heard" class="heard"><span class="muted">–</span></p>
+      </div>
+      <div class="panel">
+        <h2>Response timing</h2>
+        <div class="metric-row"><span>End of your turn → first audio</span><b id="m-ttfa">–</b></div>
+        <div class="metric-row"><span>LLM first token</span><b id="m-llm">–</b></div>
+        <div class="metric-row"><span>Rime first byte</span><b id="m-tts">–</b></div>
+        <div class="metric-row"><span>Cold / warm</span><b id="m-cold">–</b></div>
+      </div>
+      <div class="panel">
+        <h2>Background work</h2>
+        <ul id="tools" class="tools"></ul>
+      </div>
+      <div class="panel">
+        <h2>Rime configuration</h2>
+        <dl id="rime-config" class="config"></dl>
+      </div>
+      <details class="panel">
+        <summary>Event log</summary>
+        <pre id="log"></pre>
+      </details>
+    </aside>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
