@@ -57,7 +57,7 @@ select, input { background: var(--panel-2); color: var(--text); border: 1px soli
 .hint { color: var(--muted); font-size: 13px; max-width: 520px; text-align: center; line-height: 1.5; }
 
 .transcript { min-height: 420px; }
-#transcript { display: flex; flex-direction: column; gap: 10px; max-height: 60vh; overflow: auto; padding-right: 4px; }
+#transcript { display: flex; flex-direction: column; gap: 10px; max-height: 68vh; overflow: auto; padding-right: 4px; }
 .msg { padding: 10px 14px; border-radius: 12px; max-width: 92%; line-height: 1.45; font-size: 15px; }
 .msg.user { align-self: flex-end; background: #1e3a5f; }
 .msg.assistant { align-self: flex-start; background: #23303f; }

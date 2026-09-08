@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .config import load_settings
+from .capture import AudioCapture
 from .llm import build_llm
 from .session import Session
 from .stt import build_stt
@@ -24,6 +25,8 @@ WEB_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 app = FastAPI(title="ForgeDesk", version="0.1.0")
 settings = load_settings()
+# Set only when recording the demo video: captures exactly the audio the client heard.
+CAPTURE_DIR = os.environ.get("DEMO_CAPTURE_DIR", "").strip()
 
 
 @app.get("/")
@@ -48,13 +51,16 @@ async def ws_endpoint(websocket: WebSocket) -> None:
     session_id = uuid.uuid4().hex[:8]
     run_id = new_run_id()
     tel = Telemetry(run_id, path=os.path.join(settings.evidence_dir, "runs", f"live-{run_id}-{session_id}.jsonl"), session_id=session_id)
+    capture = AudioCapture(sample_rate=0) if CAPTURE_DIR else None
     try:
         tts = build_tts(settings)
     except TTSError as e:
         await websocket.send_json({"type": "fatal", "error": str(e), "hint": "Set RIME_API_KEY in .env (see .env.example)."})
         await websocket.close()
         return
-    transport = WebSocketTransport(websocket, sample_rate_out=tts.sample_rate)
+    if capture is not None:
+        capture.sample_rate = tts.sample_rate
+    transport = WebSocketTransport(websocket, sample_rate_out=tts.sample_rate, capture=capture)
     transport.start()
     tel.subscribe(lambda ev: transport.send_json({"type": "event", **ev}))
     stt = build_stt(settings)
@@ -63,6 +69,8 @@ async def ws_endpoint(websocket: WebSocket) -> None:
     try:
         await session.run()
     finally:
+        if capture is not None:
+            capture.save(CAPTURE_DIR)
         tel.close()
         await transport.close()
 

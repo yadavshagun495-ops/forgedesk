@@ -21,6 +21,10 @@ evidence/clips/
 *.wav
 !eval/fixtures/**/*.wav
 !evidence/samples/**/*.wav
+# demo: the finished video and subtitles are committed, intermediates are not
+demo/build/
+demo/voice/
+demo/capture/
 
 # editor / os
 .vscode/

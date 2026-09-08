@@ -1,4 +1,4 @@
-.PHONY: setup run test evidence-offline evidence samples preflight preflight-synth pronunciation secrets clean
+.PHONY: setup run test evidence-offline evidence samples preflight preflight-synth pronunciation secrets demo clean
 
 PY ?= .venv/bin/python
 
@@ -37,5 +37,11 @@ samples:
 secrets:
 	$(PY) -m scripts.secret_scan
 
+# Record the demo video by driving the real product (needs RIME_API_KEY + playwright chromium).
+demo:
+	$(PY) -m scripts.demo.render_voice
+	$(PY) -m scripts.demo.record
+	$(PY) -m scripts.demo.compose
+
 clean:
-	rm -rf evidence/runs evidence/clips .pytest_cache
+	rm -rf evidence/runs evidence/clips .pytest_cache demo/build demo/capture

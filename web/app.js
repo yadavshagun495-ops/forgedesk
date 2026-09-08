@@ -12,6 +12,7 @@
   let running = false, config = null, outRate = 24000;
   const assistantBubbles = new Map(); // epoch -> element
   const toolRows = new Map();
+  const eventCounts = {};
 
   // ---------------------------------------------------------------- helpers
   const log = (line) => { ui.log.textContent = (line + '\n' + ui.log.textContent).slice(0, 20000); };
@@ -24,9 +25,10 @@
     el.textContent = text;
     if (epoch !== undefined) el.dataset.epoch = epoch;
     ui.transcript.appendChild(el);
-    ui.transcript.scrollTop = ui.transcript.scrollHeight;
+    scrollBottom();
     return el;
   }
+  function scrollBottom() { ui.transcript.scrollTop = ui.transcript.scrollHeight; }
   function assistantBubble(epoch) {
     let el = assistantBubbles.get(epoch);
     if (!el) { el = bubble('assistant', '', epoch); assistantBubbles.set(epoch, el); }
@@ -91,7 +93,7 @@
       log('microphone streaming (16 kHz PCM16)');
     } catch (err) {
       log('microphone unavailable (' + err.message + '); use the text box and the Interrupt button');
-      $('hint').textContent = 'No microphone: type turns below and use the Interrupt button to barge in.';
+      if (!window.fdDemo) $('hint').textContent = 'No microphone: type turns below and use the Interrupt button to barge in.';
     }
   }
 
@@ -162,6 +164,7 @@
           const el = assistantBubble(m.epoch);
           if (m.final) { el.textContent = m.text; el.dataset.full = '1'; }
           else if (!el.dataset.full) el.textContent = ((el.textContent || '') + ' ' + m.text).trim();
+          scrollBottom();
         }
         break;
       case 'speak':
@@ -180,6 +183,7 @@
           el.classList.add('interrupted');
           el.innerHTML = `${escapeHtml(m.heard)} <span class="unheard">${escapeHtml(m.unheard)}</span><span class="tag">interrupted · heard-state via ${escapeHtml(m.method)}</span>`;
           el.dataset.full = '1';
+          scrollBottom();
         }
         break;
       }
@@ -193,6 +197,7 @@
 
   function onEvent(ev) {
     const k = ev.kind;
+    eventCounts[k] = (eventCounts[k] || 0) + 1;
     if (['tts_request', 'state', 'vad_speech_end'].includes(k)) return;
     log(`${(ev.t_ms / 1000).toFixed(2)}s ${k} ${JSON.stringify(Object.fromEntries(Object.entries(ev).filter(([x]) => !['t_ms', 'kind', 'session', 'type'].includes(x)))).slice(0, 220)}`);
     if (k === 'interrupt_stopped') { ui.mStop.textContent = ev.stop_ms + ' ms'; ui.mAck.textContent = ev.flush_ack_ms + ' ms'; ui.mAlign.textContent = ev.method; renderHeard(ev.heard, ev.unheard); }
@@ -241,4 +246,31 @@
     send({ type: 'text', text: t });
     ui.typedText.value = '';
   };
+
+  // Recording hook (?demo=1 only): drives a real session for the demo video. `mic` streams a
+  // pre-rendered caller utterance through the same WebSocket path the microphone worklet uses,
+  // so the server's VAD detects barge-in exactly as it would from a live microphone.
+  if (new URLSearchParams(location.search).has('demo')) {
+    ui.typed.style.display = 'none';
+    $('hint').textContent = 'Recording: the caller is a pre-rendered voice injected through the microphone path, so barge-in is detected by the same server-side VAD as a live mic.';
+    window.fdDemo = {
+      ready: () => running && !!config,
+      state: () => ui.orbLabel.textContent,
+      count: (kind) => eventCounts[kind] || 0,
+      start: () => { if (!running) start(); },
+      transcript: (text, final) => send({ type: 'transcript', text, final: !!final }),
+      setDelay: (ms) => { ui.delay.value = String(ms); send({ type: 'set', tool_delay_ms: Number(ms) }); },
+      interrupt: () => send({ type: 'interrupt' }),
+      async mic(b64, frameMs = 20) {
+        const raw = atob(b64);
+        const bytes = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+        const frame = 16000 * (frameMs / 1000) * 2;
+        for (let i = 0; i < bytes.length; i += frame) {
+          if (ws && ws.readyState === 1) ws.send(bytes.slice(i, i + frame).buffer);
+          await new Promise((r) => setTimeout(r, frameMs));
+        }
+      },
+    };
+  }
 })();

@@ -1,0 +1,416 @@
+1
+00:00:00,857 --> 00:00:03,745
+Forge Auto Care's customers call while driving, or with
+
+2
+00:00:03,745 --> 00:00:04,828
+their hands full.
+
+3
+00:00:04,828 --> 00:00:06,453
+ForgeDesk is its voice front desk.
+
+4
+00:00:06,453 --> 00:00:08,078
+There is no screen to fall back on.
+
+5
+00:00:14,189 --> 00:00:16,535
+Every word the agent says is spoken by Rime.
+
+6
+00:00:16,535 --> 00:00:17,619
+The badge names the exact
+
+7
+00:00:17,619 --> 00:00:20,688
+configuration: Coda,
+
+8
+00:00:20,688 --> 00:00:23,757
+speaker astra, English, twenty four
+
+9
+00:00:23,757 --> 00:00:25,562
+kilohertz P C M over the ws3
+
+10
+00:00:25,562 --> 00:00:27,187
+websocket.
+
+11
+00:00:33,299 --> 00:00:35,466
+First, the normal path.
+
+12
+00:00:36,006 --> 00:00:37,811
+Caller: Hi, I need an oil change on Tuesday
+
+13
+00:00:37,811 --> 00:00:39,436
+Caller: afternoon.
+
+14
+00:00:39,779 --> 00:00:41,945
+The panel measures the delay from the end of
+
+15
+00:00:39,983 --> 00:00:41,983
+ForgeDesk: Let me check Tuesday afternoon.
+
+16
+00:00:41,945 --> 00:00:43,931
+the caller's turn to the first audio sample the
+
+17
+00:00:41,983 --> 00:00:46,063
+ForgeDesk: On Tuesday afternoon I have 12 PM, 2 PM and 4 PM.
+
+18
+00:00:43,931 --> 00:00:46,097
+browser actually played.
+
+19
+00:00:46,063 --> 00:00:47,183
+ForgeDesk: Which works for you?
+
+20
+00:00:52,909 --> 00:00:54,354
+Caller: The first one works.
+
+21
+00:00:54,354 --> 00:00:55,798
+Caller: My name is Priya.
+
+22
+00:00:55,302 --> 00:00:58,371
+The confirmation code is read letter by letter.
+
+23
+00:00:55,545 --> 00:00:57,785
+ForgeDesk: Booking Tuesday at 12 PM for you.
+
+24
+00:00:57,785 --> 00:01:00,745
+ForgeDesk: Done. You're booked Tuesday at 12 PM.
+
+25
+00:00:58,371 --> 00:01:00,718
+We chose that wording by rendering variants with the
+
+26
+00:01:00,718 --> 00:01:03,426
+model and voice fixed, and reading back Rime's word
+
+27
+00:01:00,745 --> 00:01:06,185
+ForgeDesk: Your confirmation code is F D, Q Z 2 J.
+
+28
+00:01:03,426 --> 00:01:05,232
+timestamps.
+
+29
+00:01:06,185 --> 00:01:07,305
+ForgeDesk: Anything else?
+
+30
+00:01:14,075 --> 00:01:16,783
+Now the hard problem: interruption and
+
+31
+00:01:16,783 --> 00:01:18,227
+recovery while tools run.
+
+32
+00:01:18,227 --> 00:01:20,393
+Audio must stop promptly.
+
+33
+00:01:20,393 --> 00:01:23,282
+The application must know which words the caller heard.
+
+34
+00:01:23,282 --> 00:01:25,267
+And a lookup already in flight must never be
+
+35
+00:01:25,267 --> 00:01:27,614
+spoken as if it were current.
+
+36
+00:01:30,483 --> 00:01:32,830
+A three second delay is now injected into every
+
+37
+00:01:32,830 --> 00:01:34,275
+booking system call.
+
+38
+00:01:35,810 --> 00:01:37,615
+Caller: Book me Thursday afternoon for a brake
+
+39
+00:01:37,615 --> 00:01:39,420
+Caller: inspection.
+
+40
+00:01:38,759 --> 00:01:39,463
+ForgeDesk: Let me check Thursday afternoon.
+
+41
+00:01:39,251 --> 00:01:41,779
+Caller: Actually, make it Friday morning
+
+42
+00:01:41,779 --> 00:01:43,043
+Caller: instead.
+
+43
+00:01:41,831 --> 00:01:42,615
+ForgeDesk: Sure, let me check Friday morning.
+
+44
+00:01:42,388 --> 00:01:43,290
+Caller: Hello?
+
+45
+00:01:43,290 --> 00:01:44,734
+Caller: Are you still there?
+
+46
+00:01:45,230 --> 00:01:47,036
+Two interruptions there.
+
+47
+00:01:45,414 --> 00:01:47,174
+ForgeDesk: Still checking Friday morning.
+
+48
+00:01:47,036 --> 00:01:48,841
+The first changed the day while the Thursday lookup
+
+49
+00:01:47,174 --> 00:01:48,294
+ForgeDesk: One moment.
+
+50
+00:01:48,294 --> 00:01:52,854
+ForgeDesk: Got it. On Friday morning I have 9 AM and 11 AM.
+
+51
+00:01:48,841 --> 00:01:50,466
+was still running.
+
+52
+00:01:50,466 --> 00:01:53,535
+Playback stopped in about a millisecond;
+
+53
+00:01:52,854 --> 00:01:53,974
+ForgeDesk: Which works for you?
+
+54
+00:01:53,535 --> 00:01:56,062
+across the twenty run evidence set the median is
+
+55
+00:01:56,062 --> 00:01:57,506
+fifteen point seven.
+
+56
+00:01:57,506 --> 00:02:00,395
+The ledger recorded which words reached the speaker, and
+
+57
+00:02:00,395 --> 00:02:02,922
+the Thursday lookup was orphaned, then
+
+58
+00:02:02,922 --> 00:02:04,547
+cancelled.
+
+59
+00:02:04,547 --> 00:02:06,894
+The second was a status question during the next
+
+60
+00:02:06,894 --> 00:02:07,977
+lookup.
+
+61
+00:02:07,977 --> 00:02:09,602
+The agent did not restart it and did not
+
+62
+00:02:09,602 --> 00:02:11,588
+lose it: it waited for the one already
+
+63
+00:02:11,588 --> 00:02:14,476
+running, reconciled the result into the new
+
+64
+00:02:14,476 --> 00:02:17,004
+turn, and spoke it exactly once.
+
+65
+00:02:24,042 --> 00:02:26,027
+The last case breaks most agents.
+
+66
+00:02:26,027 --> 00:02:28,916
+The booking commits, then the caller interrupts
+
+67
+00:02:28,916 --> 00:02:30,721
+before the code reaches their ear.
+
+68
+00:02:32,528 --> 00:02:34,153
+Caller: The first one please.
+
+69
+00:02:34,260 --> 00:02:36,660
+ForgeDesk: Booking Friday at 9 AM for you.
+
+70
+00:02:36,660 --> 00:02:37,369
+ForgeDesk: Done. You're booked Friday at 9 AM.
+
+71
+00:02:37,051 --> 00:02:39,037
+Caller: Wait, can you move it to Thursday
+
+72
+00:02:39,037 --> 00:02:40,662
+Caller: afternoon?
+
+73
+00:02:39,675 --> 00:02:46,955
+ForgeDesk: Quick note, I did book Friday at 9 AM, code F D, N C F J.
+
+74
+00:02:39,830 --> 00:02:42,719
+The booking had committed, but the caller
+
+75
+00:02:42,719 --> 00:02:43,622
+never heard it.
+
+76
+00:02:43,622 --> 00:02:46,149
+The agent leads with that, then reschedules instead of
+
+77
+00:02:46,149 --> 00:02:47,774
+double booking.
+
+78
+00:02:46,955 --> 00:02:48,955
+ForgeDesk: Let me move it to Thursday afternoon.
+
+79
+00:02:48,955 --> 00:02:53,035
+ForgeDesk: On Thursday afternoon I have 12 PM, 3 PM and 4 PM.
+
+80
+00:02:53,035 --> 00:02:54,475
+ForgeDesk: Which works for you?
+
+81
+00:03:02,304 --> 00:03:03,206
+Caller: The first one.
+
+82
+00:03:03,562 --> 00:03:06,631
+Same appointment, same code,
+
+83
+00:03:03,751 --> 00:03:05,831
+ForgeDesk: Moving you to Thursday at 12 PM.
+
+84
+00:03:05,831 --> 00:03:08,711
+ForgeDesk: Done. You're now on Thursday at 12 PM.
+
+85
+00:03:06,631 --> 00:03:07,534
+moved.
+
+86
+00:03:07,534 --> 00:03:09,520
+State matches what the caller heard.
+
+87
+00:03:08,711 --> 00:03:13,351
+ForgeDesk: Same code, F D, N C F J.
+
+88
+00:03:13,351 --> 00:03:14,471
+ForgeDesk: Anything else?
+
+89
+00:03:20,854 --> 00:03:23,923
+Measured, not asserted.
+
+90
+00:03:23,923 --> 00:03:26,451
+Seven scenarios, twenty runs
+
+91
+00:03:26,451 --> 00:03:29,339
+each, against live Rime: one hundred and forty of
+
+92
+00:03:29,339 --> 00:03:31,325
+one hundred and forty passed.
+
+93
+00:03:31,325 --> 00:03:34,394
+Barge-in to playback stopped,
+
+94
+00:03:34,394 --> 00:03:36,922
+fifteen point seven milliseconds median.
+
+95
+00:03:36,922 --> 00:03:39,991
+Stale results spoken as current: zero.
+
+96
+00:03:43,562 --> 00:03:46,090
+Time to first audio is about seven hundred milliseconds
+
+97
+00:03:46,090 --> 00:03:46,812
+here.
+
+98
+00:03:46,812 --> 00:03:48,978
+Six hundred of that is network time from India
+
+99
+00:03:48,978 --> 00:03:50,784
+to Rime's US West region.
+
+100
+00:03:54,810 --> 00:03:57,698
+The repository has the tests, the item level
+
+101
+00:03:57,698 --> 00:04:00,767
+results, and the audio the caller actually
+
+102
+00:04:00,767 --> 00:04:01,670
+heard.
+
+103
+00:04:01,670 --> 00:04:03,656
+One command regenerates all of it.
+
+104
+00:04:03,656 --> 00:04:05,461
+Even this narration is Rime.
+

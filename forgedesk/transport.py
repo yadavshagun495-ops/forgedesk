@@ -41,9 +41,10 @@ class Transport(Protocol):
 
 # --------------------------------------------------------------------------- browser
 class WebSocketTransport:
-    def __init__(self, websocket, sample_rate_out: int) -> None:
+    def __init__(self, websocket, sample_rate_out: int, capture=None) -> None:
         self.ws = websocket
         self.sample_rate_out = sample_rate_out
+        self.capture = capture
         self.audio_in: asyncio.Queue[bytes] = asyncio.Queue()
         self.control_in: asyncio.Queue[dict] = asyncio.Queue()
         self._played: dict[int, int] = {}
@@ -75,10 +76,14 @@ class WebSocketTransport:
                     elif typ == "flushed":
                         ep = int(obj.get("epoch", -1))
                         self._played[ep] = int(obj.get("played", 0))
+                        if self.capture:
+                            self.capture.on_flushed(ep, self._played[ep])
                         fut = self._flush_waiters.pop(ep, None)
                         if fut and not fut.done():
                             fut.set_result(self._played[ep])
                     else:
+                        if self.capture and typ == "first_audio":
+                            self.capture.on_first_played(int(obj.get("epoch", -1)))
                         await self.control_in.put(obj)
         except Exception:  # noqa: BLE001  (client went away)
             pass
@@ -89,6 +94,8 @@ class WebSocketTransport:
     async def send_audio(self, epoch: int, seq: int, pcm: bytes) -> None:
         if self.closed.is_set():
             return
+        if self.capture:
+            self.capture.on_audio(epoch, pcm)
         try:
             await self.ws.send_bytes(pack_audio_frame(epoch, seq, pcm))
         except Exception:  # noqa: BLE001
@@ -99,6 +106,8 @@ class WebSocketTransport:
             return
         import json
 
+        if self.capture:
+            self.capture.on_json(obj)
         try:
             await self.ws.send_text(json.dumps(obj, ensure_ascii=False))
         except Exception:  # noqa: BLE001
