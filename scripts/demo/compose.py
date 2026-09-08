@@ -198,14 +198,20 @@ def main() -> int:
     cmd = [
         "ffmpeg", "-y", "-i", video, "-i", wav,
         "-vf", f"subtitles={ass}:fontsdir=/usr/share/fonts,fps=30,format=yuv420p",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "21",
-        "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", "-shortest", OUT_MP4,
+        # 48 kHz stereo: 24 kHz mono AAC is legal but several players render it silently
+        "-af", "loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000:resampler=soxr,pan=stereo|c0=c0|c1=c0",
+        "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p",
+        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
+        "-movflags", "+faststart", "-shortest", OUT_MP4,
     ]
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     size = os.path.getsize(OUT_MP4) / 1e6
     final = float(subprocess.check_output(
         ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", OUT_MP4]).decode().strip())
-    print(f"\n{OUT_MP4}  {final / 60:.2f} min  {size:.1f} MB")
+    probe = subprocess.check_output(
+        ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries",
+         "stream=codec_name,sample_rate,channels", "-of", "csv=p=0", OUT_MP4]).decode().strip()
+    print(f"\n{OUT_MP4}  {final / 60:.2f} min  {size:.1f} MB  audio: {probe}")
     print(f"{OUT_SRT}")
     return 0
 
