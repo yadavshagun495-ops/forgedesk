@@ -290,6 +290,8 @@ class Session:
             self.active_utt = None
         self._awaiting_text_after_interrupt = True
         await self._set_state("listening")
+        if not self.vad.speaking:  # user already stopped talking while we were stopping the audio
+            self._schedule_recovery()
 
     def _schedule_recovery(self) -> None:
         if self._recovery_task and not self._recovery_task.done():

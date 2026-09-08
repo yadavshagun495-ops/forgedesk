@@ -6,6 +6,7 @@ disclosed proportional estimate. Hard stop = close the streaming response.
 
 from __future__ import annotations
 
+import asyncio
 import time
 from typing import AsyncIterator
 
@@ -101,8 +102,8 @@ class RimeHttpTTS:
 
     async def cancel(self) -> None:
         resp, self._resp = self._resp, None
-        if resp is not None:
-            await resp.aclose()
+        if resp is not None:  # do not await: draining the stream would delay the stop the user hears
+            asyncio.ensure_future(resp.aclose())
 
     async def aclose(self) -> None:
         await self.cancel()

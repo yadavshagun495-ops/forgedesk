@@ -146,7 +146,8 @@ class RuleAgent:
 
     def _plan(self, text: str, ctx: dict) -> tuple[str, list[ToolCall]]:
         pending = ctx.get("pending", [])
-        running = [p for p in pending if p["status"] == "running"]
+        # a lookup that finished while we were interrupted is still "awaitable": nobody has used its result
+        awaitable = [p for p in pending if not p["is_mutation"] and p["status"] in ("running", "done")]
         unreported = ctx.get("unreported", [])
         low = text.strip().lower()
         preface = ""
@@ -162,8 +163,8 @@ class RuleAgent:
             return preface + "Hi, you've reached Forge Auto Care. Which day works for your service?", []
 
         if STATUS_RE.search(low) and not _day(low):
-            if running:
-                p = running[0]
+            if awaitable:
+                p = awaitable[0]
                 return (
                     preface + f"Still checking {self._describe(p['args'])}. One moment.",
                     [self._call("await_pending", pending_id=p["pid"])],
@@ -187,11 +188,11 @@ class RuleAgent:
                 self.reschedule_code = unreported[0]["code"]
             elif MOVE_RE.search(low) and (code or self.last_code):
                 self.reschedule_code = code or self.last_code
-            same = [p for p in running if p["name"] == "check_availability" and self._same_query(p["args"], day, period)]
+            same = [p for p in awaitable if p["name"] == "check_availability" and self._same_query(p["args"], day, period)]
             if same:
                 p = same[0]
                 return preface + "Still on it, one moment.", [self._call("await_pending", pending_id=p["pid"])]
-            calls = [self._call("cancel_pending", pending_id=p["pid"]) for p in running]
+            calls = [self._call("cancel_pending", pending_id=p["pid"]) for p in awaitable]
             lead = "Sure, " if calls else ""
             calls.append(self._call("check_availability", day=day, period=period))
             verb = "move it to" if self.reschedule_code else "check"
@@ -221,8 +222,8 @@ class RuleAgent:
                 ],
             )
 
-        if running:
-            p = running[0]
+        if awaitable:
+            p = awaitable[0]
             return preface + f"I'm still checking {self._describe(p['args'])}. Want me to keep going?", []
         return preface + "I can book, move, or cancel a service visit. Which day works for you?", []
 
