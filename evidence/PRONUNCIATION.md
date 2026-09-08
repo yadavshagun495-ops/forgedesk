@@ -8,9 +8,9 @@ Confirmation codes must be heard letter by letter. v1 is the raw code, v2 is the
 
 | Variant | Text sent to Rime | TTFB (ms) | Audio (s) | Spoken tokens (Rime timestamps) | Clip |
 |---|---|---|---|---|---|
-| v1 | `Your confirmation code is FD-7Q2K.` | 520 | 3.92 | `Your confirmation code is FD-7Q2K.` | clips/pron-code-v1.wav |
-| v2 **(shipped)** | `Your confirmation code is F D, 7 Q 2 K.` | 618 | 5.2 | `Your confirmation code is F D, 7 Q 2 K.` | clips/pron-code-v2.wav |
-| v3 | `Your confirmation code is spell(FD7Q2K).` | 698 | 6.0 | `Your confirmation code is spell(FD7Q2K).` | clips/pron-code-v3.wav |
+| v1 | `Your confirmation code is FD-7Q2K.` | 821 | 4.56 | `Your confirmation code is FD-7Q2K.` | clips/pron-code-v1.wav |
+| v2 **(shipped)** | `Your confirmation code is F D, 7 Q 2 K.` | 635 | 4.96 | `Your confirmation code is F D, 7 Q 2 K.` | clips/pron-code-v2.wav |
+| v3 | `Your confirmation code is spell(FD7Q2K).` | 553 | 7.6 | `Your confirmation code is spell(FD7Q2K).` | clips/pron-code-v3.wav |
 
 ## time
 
@@ -18,8 +18,8 @@ Times: digits with AM/PM vs words. ForgeDesk ships the digit form because it sta
 
 | Variant | Text sent to Rime | TTFB (ms) | Audio (s) | Spoken tokens (Rime timestamps) | Clip |
 |---|---|---|---|---|---|
-| v1 **(shipped)** | `On Thursday afternoon I have 1 PM, 3 PM and 4 PM.` | 390 | 4.72 | `On Thursday afternoon I have 1 PM, 3 PM and 4 PM.` | clips/pron-time-v1.wav |
-| v2 | `On Thursday afternoon I have one, three and four in the afternoon.` | 612 | 4.4 | `On Thursday afternoon I have one, three and four in the afternoon.` | clips/pron-time-v2.wav |
+| v1 **(shipped)** | `On Thursday afternoon I have 1 PM, 3 PM and 4 PM.` | 387 | 5.28 | `On Thursday afternoon I have 1 PM, 3 PM and 4 PM.` | clips/pron-time-v1.wav |
+| v2 | `On Thursday afternoon I have one, three and four in the afternoon.` | 716 | 4.0 | `On Thursday afternoon I have one, three and four in the afternoon.` | clips/pron-time-v2.wav |
 
 ## leadin
 
@@ -27,8 +27,8 @@ Lead-in before a slow tool call. A short sentence terminated with a period is re
 
 | Variant | Text sent to Rime | TTFB (ms) | Audio (s) | Spoken tokens (Rime timestamps) | Clip |
 |---|---|---|---|---|---|
-| v1 **(shipped)** | `Let me check Thursday afternoon.` | 610 | 1.92 | `Let me check Thursday afternoon.` | clips/pron-leadin-v1.wav |
-| v2 | `Let me check Thursday afternoon...` | 388 | 2.4 | `Let me check Thursday afternoon...` | clips/pron-leadin-v2.wav |
+| v1 **(shipped)** | `Let me check Thursday afternoon.` | 732 | 1.92 | `Let me check Thursday afternoon.` | clips/pron-leadin-v1.wav |
+| v2 | `Let me check Thursday afternoon...` | 630 | 2.08 | `Let me check Thursday afternoon...` | clips/pron-leadin-v2.wav |
 
 ## interrupt_ack
 
@@ -36,8 +36,8 @@ Recovery after an empty interruption. The comma pause before resuming sounds mor
 
 | Variant | Text sent to Rime | TTFB (ms) | Audio (s) | Spoken tokens (Rime timestamps) | Clip |
 |---|---|---|---|---|---|
-| v1 **(shipped)** | `Sorry, as I was saying. On Thursday afternoon I have 4 PM.` | 638 | 5.12 | `Sorry, as I was saying. On Thursday afternoon I have 4 PM.` | clips/pron-interrupt_ack-v1.wav |
-| v2 | `Sorry as I was saying on Thursday afternoon I have 4 PM.` | 609 | 3.52 | `Sorry as I was saying on Thursday afternoon I have 4 PM.` | clips/pron-interrupt_ack-v2.wav |
+| v1 **(shipped)** | `Sorry, as I was saying. On Thursday afternoon I have 4 PM.` | 637 | 4.08 | `Sorry, as I was saying. On Thursday afternoon I have 4 PM.` | clips/pron-interrupt_ack-v1.wav |
+| v2 | `Sorry as I was saying on Thursday afternoon I have 4 PM.` | 401 | 3.92 | `Sorry as I was saying on Thursday afternoon I have 4 PM.` | clips/pron-interrupt_ack-v2.wav |
 
 ## unheard_note
 
@@ -45,6 +45,6 @@ Surfacing a booking the caller never heard confirmed. Leading with 'Quick note' 
 
 | Variant | Text sent to Rime | TTFB (ms) | Audio (s) | Spoken tokens (Rime timestamps) | Clip |
 |---|---|---|---|---|---|
-| v1 **(shipped)** | `Quick note, I did book Tuesday at 1 PM, code F D, Q Z 2 J.` | 612 | 6.48 | `Quick note, I did book Tuesday at 1 PM, code F D, Q Z 2 J.` | clips/pron-unheard_note-v1.wav |
-| v2 | `I booked Tuesday at 1 PM, F D Q Z 2 J.` | 651 | 4.48 | `I booked Tuesday at 1 PM, F D Q Z 2 J.` | clips/pron-unheard_note-v2.wav |
+| v1 **(shipped)** | `Quick note, I did book Tuesday at 1 PM, code F D, Q Z 2 J.` | 632 | 6.96 | `Quick note, I did book Tuesday at 1 PM, code F D, Q Z 2 J.` | clips/pron-unheard_note-v1.wav |
+| v2 | `I booked Tuesday at 1 PM, F D Q Z 2 J.` | 723 | 4.32 | `I booked Tuesday at 1 PM, F D Q Z 2 J.` | clips/pron-unheard_note-v2.wav |
 

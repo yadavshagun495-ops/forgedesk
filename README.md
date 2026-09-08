@@ -11,10 +11,19 @@ in flight — the agent must (1) stop the audio promptly, (2) know *exactly whic
 work correctly, and (5) reply to the *new* request grounded in what was actually heard. Removing speech
 removes the product: the entire difficulty lives in the audio timeline.
 
-> **Status of the numbers in this repo:** the committed `evidence/SUMMARY-fake.md` is an *offline logic run*
-> (tone generator, clearly labelled) that proves the fencing/ledger machinery. The judged numbers come from
-> `make evidence` with a real Rime key, which writes `evidence/SUMMARY-rime.md` plus per-run JSONL and
-> "what the user heard" WAV clips. See [RIME_EVIDENCE.md](RIME_EVIDENCE.md).
+**Measured against live Rime Coda, 7 scenarios × 20 runs, 140/140 passed:**
+
+| | |
+|---|---|
+| Barge-in → playback stopped and queued audio dropped | **15.7 ms p50, 16.5 ms p95, 17.1 ms max** |
+| Caller's first mic sample → playback stopped (incl. the 180 ms barge-in guard) | **≤ 184 ms p95** |
+| Stale tool results spoken as current | **0 / 140** |
+| Audio frames played after a flush | **0 / 140** |
+| Heard/unheard resolved from Rime word timestamps | **every interrupted run** |
+| Time-to-first-audio (warm p50, from India — ~600 ms of it is Rime TTFB over the Pacific) | 650–760 ms |
+
+Method, per-check breakdown and limitations: [RIME_EVIDENCE.md](RIME_EVIDENCE.md). Audio of what the caller
+actually heard before each interruption: [evidence/samples/](evidence/samples/).
 
 ---
 
@@ -152,18 +161,23 @@ the recording. `make secrets` scans the repo; `make preflight` runs it too.
 make evidence-offline          # logic check, FakeTTS, labelled NOT EVIDENCE
 make evidence RUNS=20          # judged: real Rime, 7 scenarios x 20 runs -> evidence/SUMMARY-rime.md
 make pronunciation             # A/B clips for codes/times/lead-ins, model+voice constant
+make samples                   # curate evidence/samples/ (the audio committed to the repo)
 ```
+
+Runs are resumable: each completed run lands in `evidence/results/` and the summary is rebuilt after every
+one, so a long sweep survives an interruption (`--summarize` rebuilds without running anything).
 
 `eval/scenarios.py` holds the seven acceptance scenarios (interrupt mid-speech, interrupt during a 3 s
 lookup, status question during a lookup, baseline, wordless interruption + resume, interrupt during an
 uncommitted booking, interrupt after a committed-but-unheard booking). Each run drives the *real* session
 code with a simulated client that has a real-time playback clock, injects mic audio so the server VAD fires,
 and records JSONL telemetry (`evidence/runs/`), spoken text per epoch, ledger entries, store commits and —
-with Rime — the WAV of what the user actually heard (`evidence/clips/`). Details and results:
-[RIME_EVIDENCE.md](RIME_EVIDENCE.md).
+with Rime — the WAV of what the user actually heard (`evidence/clips/`, curated into `evidence/samples/`).
+Details and results: [RIME_EVIDENCE.md](RIME_EVIDENCE.md).
 
-Tests: `make test` (fence/ledger/VAD/chunker units, tool-runner semantics, all scenarios offline, and a
-WebSocket server test that interrupts a live session).
+Tests (no keys needed): `make test` — fence/ledger/VAD/chunker units, tool-runner semantics, all scenarios
+offline, a WebSocket server test that interrupts a live session, and the OpenAI-compatible LLM protocol
+against a mocked streaming endpoint.
 
 ## Known limitations
 

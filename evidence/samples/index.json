@@ -1,0 +1,139 @@
+{
+  "config": {
+    "provider": "rime",
+    "model_id": "coda",
+    "speaker": "astra",
+    "lang": "en",
+    "endpoint": "wss://users-ws.rime.ai/ws3",
+    "audio_format": "pcm_s16le@24000Hz mono",
+    "transport": "websocket-json (ws3)"
+  },
+  "samples": [
+    {
+      "file": "A_interrupt_mid_speech-heard.wav",
+      "scenario": "A_interrupt_mid_speech",
+      "what_it_is": "the audio the caller actually heard before the interruption stopped playback",
+      "heard": "Let me check Tuesday afternoon. On Tuesday",
+      "unheard": "afternoon I have 1 PM and 4 PM. Which works for you?",
+      "alignment": "word_timestamps",
+      "stop_ms": 16.5,
+      "audio_s": 2.78
+    },
+    {
+      "file": "B_interrupt_during_tool-heard.wav",
+      "scenario": "B_interrupt_during_tool",
+      "what_it_is": "the audio the caller actually heard before the interruption stopped playback",
+      "heard": "Let me check",
+      "unheard": "Tuesday afternoon.",
+      "alignment": "word_timestamps",
+      "stop_ms": 16.2,
+      "audio_s": 0.74
+    },
+    {
+      "file": "C_status_during_tool-heard.wav",
+      "scenario": "C_status_during_tool",
+      "what_it_is": "the audio the caller actually heard before the interruption stopped playback",
+      "heard": "Let me check",
+      "unheard": "Tuesday afternoon.",
+      "alignment": "word_timestamps",
+      "stop_ms": 15.7,
+      "audio_s": 0.73
+    },
+    {
+      "file": "E_empty_interrupt_resume-heard.wav",
+      "scenario": "E_empty_interrupt_resume",
+      "what_it_is": "the audio the caller actually heard before the interruption stopped playback",
+      "heard": "Let me check Wednesday morning. Wednesday morning",
+      "unheard": "is full. Want me to try another day?",
+      "alignment": "word_timestamps",
+      "stop_ms": 15.5,
+      "audio_s": 2.2
+    },
+    {
+      "file": "F_interrupt_uncommitted_mutation-heard.wav",
+      "scenario": "F_interrupt_uncommitted_mutation",
+      "what_it_is": "the audio the caller actually heard before the interruption stopped playback",
+      "heard": "",
+      "unheard": "Booking Tuesday at 1 PM for you.",
+      "alignment": "word_timestamps",
+      "stop_ms": 16.1,
+      "audio_s": 0.08
+    },
+    {
+      "file": "G_interrupt_after_commit_unheard-heard.wav",
+      "scenario": "G_interrupt_after_commit_unheard",
+      "what_it_is": "the audio the caller actually heard before the interruption stopped playback",
+      "heard": "Booking Tuesday at 1 PM for you. Done. You're booked Tuesday at 1 PM. Your",
+      "unheard": "confirmation code is F D, Q Z 2 J.",
+      "alignment": "word_timestamps",
+      "stop_ms": 15.6,
+      "audio_s": 5.28
+    },
+    {
+      "file": "pron-code-v1.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 4.56
+    },
+    {
+      "file": "pron-code-v2.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 4.96
+    },
+    {
+      "file": "pron-code-v3.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 7.6
+    },
+    {
+      "file": "pron-interrupt_ack-v1.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 4.08
+    },
+    {
+      "file": "pron-interrupt_ack-v2.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 3.92
+    },
+    {
+      "file": "pron-leadin-v1.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 1.92
+    },
+    {
+      "file": "pron-leadin-v2.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 2.08
+    },
+    {
+      "file": "pron-time-v1.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 5.28
+    },
+    {
+      "file": "pron-time-v2.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 4.0
+    },
+    {
+      "file": "pron-unheard_note-v1.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 6.96
+    },
+    {
+      "file": "pron-unheard_note-v2.wav",
+      "scenario": "pronunciation",
+      "what_it_is": "delivery variant rendered with the model and voice held constant",
+      "audio_s": 4.32
+    }
+  ]
+}

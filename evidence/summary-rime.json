@@ -12,7 +12,7 @@
     "alignment": "rime word timestamps (en/es) + proportional fallback"
   },
   "started_utc": "2026-09-08 04:11:10",
-  "elapsed_s": 699.6,
+  "elapsed_s": 2773.6,
   "scenarios": {
     "A_interrupt_mid_speech": {
       "description": "User talks over the slot offer and changes the day. Audio must stop promptly; the ledger must know which words were heard; the new answer must be about Thursday.",
@@ -178,15 +178,15 @@
     "C_status_during_tool": {
       "description": "User asks 'are you still there?' during a 3 s lookup. The lookup must continue and its result must be reconciled, not restarted or lost.",
       "claim": "The voice session stays responsive during tool work without losing context.",
-      "runs": 13,
-      "passed": 13,
+      "runs": 20,
+      "passed": 20,
       "checks": {
-        "script_completed": "13/13",
-        "interrupted": "13/13",
-        "lookup_not_restarted": "13/13",
-        "result_reconciled_into_new_epoch": "13/13",
-        "status_acknowledged": "13/13",
-        "result_spoken_once_after_reconcile": "13/13"
+        "script_completed": "20/20",
+        "interrupted": "20/20",
+        "lookup_not_restarted": "20/20",
+        "result_reconciled_into_new_epoch": "20/20",
+        "status_acknowledged": "20/20",
+        "result_spoken_once_after_reconcile": "20/20"
       },
       "stop_ms": {
         "p50": 15.7,
@@ -198,31 +198,31 @@
         "p95": 15.4
       },
       "vad_detect_ms": {
-        "p50": 163.6,
-        "p95": 165.3
+        "p50": 163.8,
+        "p95": 166.1
       },
       "user_speech_to_audio_stop_ms": {
-        "p50": 179.3,
-        "p95": 181.0
+        "p50": 179.4,
+        "p95": 182.1
       },
       "ttfa_ms_all": {
-        "p50": 630.7,
-        "p95": 835.6,
-        "n": 26
+        "p50": 651.8,
+        "p95": 1052.7,
+        "n": 40
       },
       "ttfa_ms_cold": {
         "p50": null,
         "n": 0
       },
       "ttfa_ms_warm": {
-        "p50": 630.7,
-        "p95": 835.6,
-        "n": 26
+        "p50": 651.8,
+        "p95": 1052.7,
+        "n": 40
       },
       "tts_first_byte_ms": {
-        "p50": 605.0,
-        "p95": 716.4,
-        "n": 65
+        "p50": 600.8,
+        "p95": 811.9,
+        "n": 100
       },
       "stale_results_fenced_total": 0,
       "late_frames_dropped_total": 0,
@@ -243,7 +243,305 @@
         "evidence/clips/C_status_during_tool-rime-09-heard-e1.wav",
         "evidence/clips/C_status_during_tool-rime-10-heard-e1.wav",
         "evidence/clips/C_status_during_tool-rime-11-heard-e1.wav",
-        "evidence/clips/C_status_during_tool-rime-12-heard-e1.wav"
+        "evidence/clips/C_status_during_tool-rime-12-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-13-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-14-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-15-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-16-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-17-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-18-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-19-heard-e1.wav"
+      ]
+    },
+    "D_baseline_no_interrupt": {
+      "description": "Normal end-to-end booking, two turns. Measures time-to-first-audio and confirms the code is spoken letter by letter.",
+      "claim": "Normal path works end to end with Rime as the only speaker.",
+      "runs": 20,
+      "passed": 20,
+      "checks": {
+        "script_completed": "20/20",
+        "booking_committed": "20/20",
+        "confirmation_code_spoken_letter_by_letter": "20/20",
+        "two_turns_completed": "20/20",
+        "ttfa_measured": "20/20",
+        "not_interrupted": "20/20"
+      },
+      "stop_ms": {
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "flush_ack_ms": {
+        "p50": null,
+        "p95": null
+      },
+      "vad_detect_ms": {
+        "p50": null,
+        "p95": null
+      },
+      "user_speech_to_audio_stop_ms": {
+        "p50": null,
+        "p95": null
+      },
+      "ttfa_ms_all": {
+        "p50": 756.7,
+        "p95": 917.9,
+        "n": 40
+      },
+      "ttfa_ms_cold": {
+        "p50": null,
+        "n": 0
+      },
+      "ttfa_ms_warm": {
+        "p50": 756.7,
+        "p95": 917.9,
+        "n": 40
+      },
+      "tts_first_byte_ms": {
+        "p50": 624.1,
+        "p95": 795.0,
+        "n": 140
+      },
+      "stale_results_fenced_total": 0,
+      "late_frames_dropped_total": 0,
+      "alignment_methods": [
+        "n/a"
+      ],
+      "errors": [],
+      "clips": []
+    },
+    "E_empty_interrupt_resume": {
+      "description": "A cough interrupts the agent mid-sentence with no words. The agent resumes from the first unheard word.",
+      "claim": "Heard-state is tracked at word level and used for recovery.",
+      "runs": 20,
+      "passed": 20,
+      "checks": {
+        "script_completed": "20/20",
+        "interrupted": "20/20",
+        "resumed": "20/20",
+        "resume_covers_all_unheard_text": "20/20",
+        "resume_restarts_at_sentence_boundary": "20/20",
+        "fully_heard_sentences_not_repeated": "20/20"
+      },
+      "stop_ms": {
+        "p50": 15.6,
+        "p95": 16.4,
+        "max": 17.1
+      },
+      "flush_ack_ms": {
+        "p50": 15.4,
+        "p95": 16.1
+      },
+      "vad_detect_ms": {
+        "p50": 163.2,
+        "p95": 166.4
+      },
+      "user_speech_to_audio_stop_ms": {
+        "p50": 179.0,
+        "p95": 182.0
+      },
+      "ttfa_ms_all": {
+        "p50": 748.9,
+        "p95": 969.4,
+        "n": 20
+      },
+      "ttfa_ms_cold": {
+        "p50": null,
+        "n": 0
+      },
+      "ttfa_ms_warm": {
+        "p50": 748.9,
+        "p95": 969.4,
+        "n": 20
+      },
+      "tts_first_byte_ms": {
+        "p50": 612.4,
+        "p95": 804.1,
+        "n": 98
+      },
+      "stale_results_fenced_total": 0,
+      "late_frames_dropped_total": 0,
+      "alignment_methods": [
+        "word_timestamps"
+      ],
+      "errors": [],
+      "clips": [
+        "evidence/clips/E_empty_interrupt_resume-rime-00-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-01-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-02-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-03-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-04-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-05-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-06-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-07-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-08-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-09-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-10-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-11-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-12-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-13-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-14-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-15-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-16-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-17-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-18-heard-e1.wav",
+        "evidence/clips/E_empty_interrupt_resume-rime-19-heard-e1.wav"
+      ]
+    },
+    "F_interrupt_uncommitted_mutation": {
+      "description": "User changes their mind while a 2.5 s booking write is in flight. The write must be cancelled and nothing committed.",
+      "claim": "Application state stays consistent with what the user asked for and heard.",
+      "runs": 20,
+      "passed": 20,
+      "checks": {
+        "script_completed": "20/20",
+        "interrupted": "20/20",
+        "uncommitted_booking_cancelled": "20/20",
+        "nothing_committed": "20/20",
+        "no_false_confirmation_spoken": "20/20",
+        "new_request_answered": "20/20"
+      },
+      "stop_ms": {
+        "p50": 15.9,
+        "p95": 16.1,
+        "max": 16.2
+      },
+      "flush_ack_ms": {
+        "p50": 15.5,
+        "p95": 15.7
+      },
+      "vad_detect_ms": {
+        "p50": 163.5,
+        "p95": 165.6
+      },
+      "user_speech_to_audio_stop_ms": {
+        "p50": 179.2,
+        "p95": 181.5
+      },
+      "ttfa_ms_all": {
+        "p50": 680.1,
+        "p95": 958.9,
+        "n": 59
+      },
+      "ttfa_ms_cold": {
+        "p50": null,
+        "n": 0
+      },
+      "ttfa_ms_warm": {
+        "p50": 680.1,
+        "p95": 958.9,
+        "n": 59
+      },
+      "tts_first_byte_ms": {
+        "p50": 628.0,
+        "p95": 835.5,
+        "n": 171
+      },
+      "stale_results_fenced_total": 0,
+      "late_frames_dropped_total": 0,
+      "alignment_methods": [
+        "nothing",
+        "word_timestamps"
+      ],
+      "errors": [],
+      "clips": [
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-00-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-01-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-02-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-03-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-04-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-05-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-06-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-07-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-08-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-09-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-10-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-11-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-12-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-13-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-14-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-15-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-16-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-17-heard-e2.wav",
+        "evidence/clips/F_interrupt_uncommitted_mutation-rime-19-heard-e2.wav"
+      ]
+    },
+    "G_interrupt_after_commit_unheard": {
+      "description": "Booking commits, user interrupts before hearing the code, then asks to move it. The agent surfaces the unheard booking and reschedules instead of double-booking.",
+      "claim": "Committed-but-unheard actions are reconciled, never silently lost or duplicated.",
+      "runs": 20,
+      "passed": 20,
+      "checks": {
+        "script_completed": "20/20",
+        "interrupted": "20/20",
+        "unheard_confirmation_detected": "20/20",
+        "unheard_booking_surfaced_first": "20/20",
+        "moved_not_duplicated": "20/20",
+        "same_code_kept": "20/20"
+      },
+      "stop_ms": {
+        "p50": 15.6,
+        "p95": 16.0,
+        "max": 16.4
+      },
+      "flush_ack_ms": {
+        "p50": 15.4,
+        "p95": 15.8
+      },
+      "vad_detect_ms": {
+        "p50": 164.2,
+        "p95": 165.9
+      },
+      "user_speech_to_audio_stop_ms": {
+        "p50": 179.8,
+        "p95": 182.0
+      },
+      "ttfa_ms_all": {
+        "p50": 756.1,
+        "p95": 979.0,
+        "n": 80
+      },
+      "ttfa_ms_cold": {
+        "p50": null,
+        "n": 0
+      },
+      "ttfa_ms_warm": {
+        "p50": 756.1,
+        "p95": 979.0,
+        "n": 80
+      },
+      "tts_first_byte_ms": {
+        "p50": 637.7,
+        "p95": 827.1,
+        "n": 285
+      },
+      "stale_results_fenced_total": 0,
+      "late_frames_dropped_total": 0,
+      "alignment_methods": [
+        "word_timestamps"
+      ],
+      "errors": [],
+      "clips": [
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-00-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-01-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-02-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-03-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-04-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-05-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-06-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-07-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-08-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-09-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-10-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-11-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-12-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-13-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-14-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-15-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-16-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-17-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-18-heard-e2.wav",
+        "evidence/clips/G_interrupt_after_commit_unheard-rime-19-heard-e2.wav"
       ]
     }
   }
