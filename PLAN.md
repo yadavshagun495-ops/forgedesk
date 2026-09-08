@@ -3,9 +3,9 @@
 Source brief: [Rime Hackathon Challenge PDF](https://drive.google.com/file/d/11ESipVAAFCH4zseBvpfbpGNchFJmmDNz/view) (6 pages).
 
 > **Status (2026-09-07):** Phases 0–6 are implemented as **ForgeDesk** — see [README.md](README.md),
-> [RIME_EVIDENCE.md](RIME_EVIDENCE.md), [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md). Remaining human steps:
-> add `RIME_API_KEY` to `.env`, run `make preflight-synth`, `make evidence RUNS=20`, `make pronunciation`,
-> paste the Rime results table into RIME_EVIDENCE.md, record the demo.
+> [RIME_EVIDENCE.md](RIME_EVIDENCE.md), [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md). Verified against the live
+> Rime API: preflight passes, all seven acceptance scenarios pass with `modelId=coda`/`astra`/`en` over ws3,
+> and the evidence + pronunciation artifacts are generated. Remaining human step: **record the demo**.
 
 ---
 

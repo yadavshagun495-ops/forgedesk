@@ -34,7 +34,7 @@ class Telemetry:
     def __post_init__(self) -> None:
         if self.path:
             os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
-            self._fh = open(self.path, "a", encoding="utf-8")
+            self._fh = open(self.path, "w", encoding="utf-8")  # one file per run; never mix runs
 
     def now_ms(self) -> float:
         return (time.monotonic() - self._t0) * 1000.0

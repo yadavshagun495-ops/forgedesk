@@ -1,4 +1,4 @@
-.PHONY: setup run test evidence-offline evidence preflight preflight-synth pronunciation secrets clean
+.PHONY: setup run test evidence-offline evidence samples preflight preflight-synth pronunciation secrets clean
 
 PY ?= .venv/bin/python
 
@@ -29,6 +29,10 @@ preflight-synth:
 
 pronunciation:
 	$(PY) -m scripts.render_variants
+
+# Curate a small committed sample: one "what the user heard" clip per scenario + pronunciation clips.
+samples:
+	$(PY) -m scripts.collect_samples
 
 secrets:
 	$(PY) -m scripts.secret_scan

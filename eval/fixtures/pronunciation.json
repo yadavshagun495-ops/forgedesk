@@ -1,7 +1,8 @@
 [
   {
     "id": "code",
-    "note": "Confirmation codes must be heard letter by letter. v1 is the raw code, v2 is the spaced form we ship for Coda, v3 is the spell() form we ship for Mist models.",
+    "shipped": 2,
+    "note": "Confirmation codes must be heard letter by letter. v1 is the raw code, v2 is the spaced form ForgeDesk ships on Coda, v3 is the spell() form ForgeDesk ships on Mist models. Rendering v3 on Coda shows why the choice is model-specific: Coda does not process spell().",
     "variants": [
       "Your confirmation code is FD-7Q2K.",
       "Your confirmation code is F D, 7 Q 2 K.",
@@ -10,7 +11,8 @@
   },
   {
     "id": "time",
-    "note": "Times: digits with AM/PM vs words. We ship the digit form because it stays short and Rime's text normalization reads it correctly.",
+    "shipped": 1,
+    "note": "Times: digits with AM/PM vs words. ForgeDesk ships the digit form because it stays short and Rime's text normalization reads it correctly.",
     "variants": [
       "On Thursday afternoon I have 1 PM, 3 PM and 4 PM.",
       "On Thursday afternoon I have one, three and four in the afternoon."
@@ -18,7 +20,8 @@
   },
   {
     "id": "leadin",
-    "note": "Lead-in before a slow tool call. A short sentence with a period gets to first audio faster than a clause ending in an ellipsis.",
+    "shipped": 1,
+    "note": "Lead-in before a slow tool call. A short sentence terminated with a period is released by the chunker immediately; the ellipsis variant delays the flush and adds trailing silence before the lookup starts.",
     "variants": [
       "Let me check Thursday afternoon.",
       "Let me check Thursday afternoon..."
@@ -26,6 +29,7 @@
   },
   {
     "id": "interrupt_ack",
+    "shipped": 1,
     "note": "Recovery after an empty interruption. The comma pause before resuming sounds more natural than running straight on.",
     "variants": [
       "Sorry, as I was saying. On Thursday afternoon I have 4 PM.",
@@ -33,8 +37,7 @@
     ]
   },
   {
-    "id": "unheard_note",
-    "note": "Surfacing a booking the caller never heard confirmed. Leading with 'Quick note' signals a correction without sounding alarmed.",
+    "id": "unheard_note",    "shipped": 1,    "note": "Surfacing a booking the caller never heard confirmed. Leading with 'Quick note' signals a correction without sounding alarmed.",
     "variants": [
       "Quick note, I did book Tuesday at 1 PM, code F D, Q Z 2 J.",
       "I booked Tuesday at 1 PM, F D Q Z 2 J."

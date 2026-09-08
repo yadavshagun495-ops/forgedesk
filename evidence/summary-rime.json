@@ -1,0 +1,160 @@
+{
+  "tts": "rime",
+  "tts_engine": {
+    "provider": "rime",
+    "model_id": "coda",
+    "speaker": "astra",
+    "lang": "en",
+    "endpoint": "wss://users-ws.rime.ai/ws3",
+    "audio_format": "pcm_s16le@24000Hz mono",
+    "transport": "websocket-json (ws3)",
+    "engine": "rime-ws3",
+    "alignment": "rime word timestamps (en/es) + proportional fallback"
+  },
+  "started_utc": "2026-09-08 04:11:10",
+  "elapsed_s": 260.2,
+  "scenarios": {
+    "A_interrupt_mid_speech": {
+      "description": "User talks over the slot offer and changes the day. Audio must stop promptly; the ledger must know which words were heard; the new answer must be about Thursday.",
+      "claim": "Queued Rime audio stops promptly and the next response is grounded in what was heard.",
+      "runs": 20,
+      "passed": 20,
+      "checks": {
+        "script_completed": "20/20",
+        "interrupted": "20/20",
+        "audio_stopped_under_300ms": "20/20",
+        "heard_is_prefix_of_intended": "20/20",
+        "some_text_unheard": "20/20",
+        "word_level_alignment": "20/20",
+        "new_request_answered": "20/20",
+        "stale_offer_not_repeated": "20/20",
+        "no_stale_tool_results_spoken": "20/20"
+      },
+      "stop_ms": {
+        "p50": 15.6,
+        "p95": 16.5,
+        "max": 16.9
+      },
+      "flush_ack_ms": {
+        "p50": 15.4,
+        "p95": 16.3
+      },
+      "vad_detect_ms": {
+        "p50": 164.1,
+        "p95": 167.6
+      },
+      "user_speech_to_audio_stop_ms": {
+        "p50": 180.2,
+        "p95": 183.7
+      },
+      "ttfa_ms_all": {
+        "p50": 682.4,
+        "p95": 762.2,
+        "n": 40
+      },
+      "ttfa_ms_cold": {
+        "p50": 550.4,
+        "n": 1
+      },
+      "ttfa_ms_warm": {
+        "p50": 682.9,
+        "p95": 763.0,
+        "n": 39
+      },
+      "tts_first_byte_ms": {
+        "p50": 605.3,
+        "p95": 712.6,
+        "n": 113
+      },
+      "stale_results_fenced_total": 0,
+      "late_frames_dropped_total": 0,
+      "alignment_methods": [
+        "word_timestamps"
+      ],
+      "errors": [],
+      "clips": [
+        "evidence/clips/A_interrupt_mid_speech-rime-00-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-01-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-02-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-03-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-04-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-05-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-06-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-07-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-08-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-09-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-10-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-11-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-12-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-13-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-14-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-15-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-16-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-17-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-18-heard-e1.wav",
+        "evidence/clips/A_interrupt_mid_speech-rime-19-heard-e1.wav"
+      ]
+    },
+    "B_interrupt_during_tool": {
+      "description": "User changes the request while a 3 s lookup is in flight. The stale lookup must never be spoken as current.",
+      "claim": "Delayed tool results cannot re-enter the conversation after an interruption.",
+      "runs": 1,
+      "passed": 1,
+      "checks": {
+        "script_completed": "1/1",
+        "interrupted": "1/1",
+        "audio_stopped_under_300ms": "1/1",
+        "old_lookup_orphaned_not_killed": "1/1",
+        "old_lookup_discarded_or_fenced": "1/1",
+        "stale_tuesday_result_never_spoken": "1/1",
+        "new_request_answered": "1/1",
+        "exactly_one_tuesday_lookup": "1/1"
+      },
+      "stop_ms": {
+        "p50": 16.2,
+        "p95": 16.2,
+        "max": 16.2
+      },
+      "flush_ack_ms": {
+        "p50": 15.8,
+        "p95": 15.8
+      },
+      "vad_detect_ms": {
+        "p50": 165.6,
+        "p95": 165.6
+      },
+      "user_speech_to_audio_stop_ms": {
+        "p50": 181.8,
+        "p95": 181.8
+      },
+      "ttfa_ms_all": {
+        "p50": 452.2,
+        "p95": 452.4,
+        "n": 2
+      },
+      "ttfa_ms_cold": {
+        "p50": null,
+        "n": 0
+      },
+      "ttfa_ms_warm": {
+        "p50": 452.2,
+        "p95": 452.4,
+        "n": 2
+      },
+      "tts_first_byte_ms": {
+        "p50": 407.8,
+        "p95": 606.9,
+        "n": 5
+      },
+      "stale_results_fenced_total": 0,
+      "late_frames_dropped_total": 0,
+      "alignment_methods": [
+        "word_timestamps"
+      ],
+      "errors": [],
+      "clips": [
+        "evidence/clips/B_interrupt_during_tool-rime-00-heard-e1.wav"
+      ]
+    }
+  }
+}

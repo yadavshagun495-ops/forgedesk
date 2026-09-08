@@ -113,6 +113,7 @@ class RunResult:
     scenario: str
     run_idx: int
     tts: str
+    tts_kind: str
     events: list[dict]
     client: dict
     store: dict
@@ -158,7 +159,7 @@ def build_tts(kind: str, settings: Settings):
 
 async def run_scenario(scn: Scenario, tts_kind: str, run_idx: int, out_dir: str, tts=None) -> RunResult:
     settings = make_settings(scn.tool_delay_ms, tts_kind)
-    run_id = f"{scn.name}-{run_idx:02d}"
+    run_id = f"{scn.name}-{tts_kind}-{run_idx:02d}"
     os.makedirs(os.path.join(out_dir, "runs"), exist_ok=True)
     tel = Telemetry(run_id, path=os.path.join(out_dir, "runs", f"{run_id}.jsonl"), session_id=run_id)
     own_tts = tts is None
@@ -189,6 +190,7 @@ async def run_scenario(scn: Scenario, tts_kind: str, run_idx: int, out_dir: str,
         scenario=scn.name,
         run_idx=run_idx,
         tts=tts.name,
+        tts_kind=tts_kind,
         events=list(tel.events),
         client=client.snapshot(),
         store=store.snapshot(),

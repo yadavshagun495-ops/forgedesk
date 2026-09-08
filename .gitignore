@@ -15,11 +15,12 @@ venv/
 build/
 dist/
 
-# generated evidence (keep committed summaries, ignore bulky raw runs/clips)
+# generated evidence: summaries and a curated sample are committed, bulky raw runs are not
 evidence/runs/
 evidence/clips/
 *.wav
 !eval/fixtures/**/*.wav
+!evidence/samples/**/*.wav
 
 # editor / os
 .vscode/

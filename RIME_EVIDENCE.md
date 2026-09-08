@@ -61,6 +61,37 @@ Offline logic check (tone generator, **not evidence**): `make evidence-offline`.
 
 ## Results
 
+### What the first live run caught (why measuring the user-visible path matters)
+
+The offline harness passed 35/35 while the product was, against the real API, badly broken. The first run
+with a Rime key measured **`stop_ms` = 10,001 ms** on every interruption scenario — the user would have kept
+hearing the old sentence for ten seconds. Causes, all invisible to a proxy metric:
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| barge-in → audio stop = 10,001 ms | `cancel()` awaited the WebSocket close handshake; mid-stream the server keeps sending, so it blocked for the full `close_timeout` | detach the socket, close it in the background, continue on a pre-warmed spare — **~15 ms** |
+| every synthesis after the first interruption failed with `ConcurrencyError: cannot call recv while another coroutine is already running recv` | the abandoned generator still owned the socket and cleared the engine's busy flag when it was finalised | per-synthesis socket ownership: a generator only releases the engine if it still owns the connection |
+| a turn after a ~7 s pause fell back to Rime HTTP (4.2 s to first audio) | Rime drops idle ws3 sockets; both the pooled socket and the equally old spare were dead, so both retries failed | 5 s pings, `close_code`/age checked before reuse, and a dropped connection forces a brand-new socket instead of a stale spare |
+
+After the fixes, the same seven scenarios pass end to end against Rime, and a direct connection test
+(cold, warm, 8/15/30/45 s idle gaps, and cancel-mid-stream-then-resynthesize) shows **0 reconnects** with
+warm TTFB 400–880 ms throughout. The HTTP fallback that engaged during the failure is itself evidence that
+the disclosed fallback path works and stays visible.
+
+### Region choice (network vs model latency)
+
+Six warm ws3 requests per endpoint from the development machine (India), production configuration:
+
+| Endpoint | Cold | Warm TTFB p50 | Min | Max |
+|---|---|---|---|---|
+| `wss://users-ws.rime.ai` (US West, default) | 519 ms | **578 ms** | 359 ms | 582 ms |
+| `wss://users-east-ws.rime.ai` (US East) | 403 ms | 637 ms | 514 ms | 723 ms |
+
+Most of this is trans-Pacific network time — TLS connect alone is ~1.1 s from here, and Rime publishes ~96 ms
+P50 model latency for Coda. Time-to-first-audio figures below are therefore **network-bound and specific to
+this location**; they are not a claim about Rime's inference speed, and a judge running the same command from
+a US region should see materially lower numbers.
+
 ### Offline logic run (FakeTTS) — proves the machinery, NOT a Rime measurement
 
 Committed as [evidence/SUMMARY-fake.md](evidence/SUMMARY-fake.md). 7 scenarios × 5 runs, 35/35 passed.
@@ -91,9 +122,21 @@ exactly once. The recorded demo shows this with a microphone.
 
 `eval/fixtures/pronunciation.json` holds five fixtures (confirmation code, times, lead-in punctuation,
 interruption acknowledgement, unheard-booking note), each with 2–3 wordings. `make pronunciation` renders
-every variant with the production model and voice held constant, saves the clips and a table with TTFB and
-duration; the listening notes justify the wording ForgeDesk ships (spaced letters with a comma pause for
-codes on Coda, `spell()` on Mist; digit times; period rather than ellipsis before a tool call).
+every variant over ws3 with the production model and voice held constant, saves the clips, and records **the
+tokens Rime actually spoke** from its word-level timestamps — so the comparison does not depend on anyone's
+ears. Full table: [evidence/PRONUNCIATION.md](evidence/PRONUNCIATION.md).
+
+The decisive one, confirmation codes (Coda, `astra`, identical apart from the text):
+
+| Variant | Text sent | Spoken tokens | Audio |
+|---|---|---|---|
+| v1 | `Your confirmation code is FD-7Q2K.` | 5 — the code is a single token | 3.92 s |
+| **v2 (shipped on Coda)** | `Your confirmation code is F D, 7 Q 2 K.` | **10 — every letter and digit separate** | 5.20 s |
+| v3 | `Your confirmation code is spell(FD7Q2K).` | 5 — `spell(FD7Q2K).` stays one token | 6.00 s |
+
+v3 is the form ForgeDesk ships on Mist models; rendering it on Coda shows objectively why the choice must be
+model-specific (Coda does not process `spell()`, and the 6.00 s of audio for one token is it reading the
+literal text). `forgedesk/llm/prompt.py` picks the right form from `RIME_MODEL_ID`.
 
 ## Limitations and unsupported input
 
@@ -102,6 +145,11 @@ codes on Coda, `spell()` on Mist; digit times; period rather than ellipsis befor
 - `stop_ms` is measured to the client's acknowledgement (upper bound). On localhost this is a few ms; over a
   real network add one round trip. `detect_ms` includes the deliberate 180 ms barge-in guard against
   coughs and clicks; both are reported separately.
+- **Time-to-first-audio here is dominated by trans-Pacific network latency** (see the region table above),
+  not by Rime inference or by ForgeDesk. It is reported as measured, from India, warm and cold labelled.
+- Rime drops idle ws3 sockets within seconds. Pings and a warm spare hide this, but the first turn after a
+  long pause can still pay a reconnect, and if both connections are dead the turn is served by the disclosed
+  Rime HTTP fallback (visibly, in the badge and telemetry) instead of failing.
 - The simulated client models playback as continuous from first frame; it does not model audio device
   buffering (typically 10–40 ms extra on real hardware).
 - Cold vs warm: the first synthesis of a process is labelled cold (socket pre-warming hides most of it);

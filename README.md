@@ -48,10 +48,32 @@ Offline logic check without any keys: `TTS_PROVIDER=fake make run` (badge shows 
 
 Why this configuration: Coda over `/ws3` returns **word-level timestamps** alongside the audio; that is what
 lets ForgeDesk map "playback stopped at sample N" back to "the caller heard up to the word *Thursday*".
-`segment=never` gives us deterministic synthesis boundaries (Rime's recommendation for agents); a hard
-stop is a socket close, because Rime's `clear` does not cancel in-flight synthesis. The model/speaker/lang
-combination is validated against the **live catalog** (`/data/voices/all-v2.json`) by `make preflight`
-rather than a stale list in code. `GET /config` on the running server returns this configuration.
+`segment=never` gives us deterministic synthesis boundaries (Rime's recommendation for agents). The
+model/speaker/lang combination is validated against the **live catalog** (`/data/voices/all-v2.json`) by
+`make preflight` rather than a stale list in code. `GET /config` on the running server returns this
+configuration.
+
+**Hard stop is a socket drop, not a close handshake.** Rime's `clear` operation does not cancel an
+in-flight synthesis, so the connection has to go. But `close()` waits for the server's close frame, and
+mid-stream the server keeps sending: awaiting it made barge-in → audio-stop take **10,001 ms** in the first
+live run. ForgeDesk detaches the socket, closes it in the background and continues on a pre-warmed spare,
+which brought the same measurement to **~15 ms**. Idle ws3 sockets are also dropped server-side within a few
+seconds, so connections are kept warm with 5 s pings, checked (`close_code`, age) before reuse, and a
+dropped connection forces a brand-new one instead of retrying an equally stale spare.
+
+### Region choice
+
+Measured from the development machine (India) with the production configuration, 6 warm requests each:
+
+| Endpoint | Warm TTFB p50 | Min | Max |
+|---|---|---|---|
+| `wss://users-ws.rime.ai` (US West) | **578 ms** | 359 ms | 582 ms |
+| `wss://users-east-ws.rime.ai` (US East) | 637 ms | 514 ms | 723 ms |
+
+US West is the default. Almost all of that is trans-Pacific network time (Rime's published Coda model
+latency is ~96 ms P50): TLS connect alone measures ~1.1 s from here. Judges running this from a US region
+should see substantially lower time-to-first-audio; the numbers in `evidence/` are honest about where they
+were taken.
 
 ### Fallback behaviour (visible, disclosed)
 
@@ -91,7 +113,7 @@ flowchart LR
    and logged (`tool_stale_result_fenced`), never spoken, never committed. The player worklet is a second
    fence: audio frames for a flushed or older epoch are discarded client-side.
 2. **Hard stop + heard ledger** (`forgedesk/speech.py`, `forgedesk/ledger.py`). On interruption the server
-   sends `flush`, closes the Rime socket, and the client reports the exact number of samples it played. The
+   sends `flush`, drops the Rime socket, and the client reports the exact number of samples it played. The
    `PlayoutMap` knows which sentence produced which slice of the timeline and, from Rime's timestamps, which
    words. Result: `heard="Let me check Thursday"`, `unheard="afternoon. Still checking."`. That goes into the
    LLM context (and drives the "as I was saying…" resume when the interruption had no words).
@@ -108,7 +130,9 @@ flowchart LR
    serialized per sentence on a warm socket with a pre-opened spare, so a hard stop costs no reconnect.
 6. **Writing for the ear** — the system prompt enforces one or two short sentences, one question, a lead-in
    before slow lookups, and confirmation codes rendered letter by letter (`F D, 7 Q 2 K` on Coda,
-   `spell(FD7Q2K)` on Mist). `eval/fixtures/pronunciation.json` + `make pronunciation` render A/B variants.
+   `spell(FD7Q2K)` on Mist). `make pronunciation` renders every A/B variant with the model and voice held
+   constant and records **the tokens Rime actually spoke** (from its word timestamps), so the choice is
+   evidence rather than opinion — see [evidence/PRONUNCIATION.md](evidence/PRONUNCIATION.md).
 
 ## Third-party services
 
@@ -148,6 +172,12 @@ WebSocket server test that interrupts a live session).
   A word counts as heard once 60 % of it has played.
 - **Stop latency is measured to the client's acknowledgement**, which is an upper bound on when playback
   actually stopped (the flush message arrives one half round-trip earlier).
+- **Time-to-first-audio is network-bound from outside the US.** From the development machine (India) warm
+  TTFB to Rime is ~400–880 ms, of which Rime's own model latency is ~96 ms P50 per their published
+  benchmarks. This is disclosed in the evidence rather than presented as application latency.
+- **Long idle gaps.** Rime drops idle ws3 sockets within seconds. Pings and a pre-warmed spare hide this,
+  but the very first turn after a long pause can still pay a reconnect; if both the socket and the spare are
+  dead, the turn falls back to Rime HTTP (visible in the badge) rather than failing.
 - **Echo.** Full duplex with speakers can make the mic hear the agent. The browser path uses `echoCancellation`,
   the VAD needs 180 ms of speech, and headphones are recommended for the demo. Chrome's Web Speech API does its
   own capture without our AEC — prefer Deepgram when demoing on speakers.

@@ -1,0 +1,251 @@
+{
+  "config": {
+    "provider": "rime",
+    "model_id": "coda",
+    "speaker": "astra",
+    "lang": "en",
+    "endpoint": "wss://users-ws.rime.ai/ws3",
+    "audio_format": "pcm_s16le@24000Hz mono",
+    "transport": "websocket-json (ws3)"
+  },
+  "rows": [
+    {
+      "id": "code",
+      "variant": 1,
+      "text": "Your confirmation code is FD-7Q2K.",
+      "ttfb_ms": 520,
+      "audio_s": 3.92,
+      "words": [
+        "Your",
+        "confirmation",
+        "code",
+        "is",
+        "FD-7Q2K."
+      ],
+      "clip": "clips/pron-code-v1.wav",
+      "note": "Confirmation codes must be heard letter by letter. v1 is the raw code, v2 is the spaced form ForgeDesk ships on Coda, v3 is the spell() form ForgeDesk ships on Mist models. Rendering v3 on Coda shows why the choice is model-specific: Coda does not process spell().",
+      "shipped": false
+    },
+    {
+      "id": "code",
+      "variant": 2,
+      "text": "Your confirmation code is F D, 7 Q 2 K.",
+      "ttfb_ms": 618,
+      "audio_s": 5.2,
+      "words": [
+        "Your",
+        "confirmation",
+        "code",
+        "is",
+        "F",
+        "D,",
+        "7",
+        "Q",
+        "2",
+        "K."
+      ],
+      "clip": "clips/pron-code-v2.wav",
+      "note": "Confirmation codes must be heard letter by letter. v1 is the raw code, v2 is the spaced form ForgeDesk ships on Coda, v3 is the spell() form ForgeDesk ships on Mist models. Rendering v3 on Coda shows why the choice is model-specific: Coda does not process spell().",
+      "shipped": true
+    },
+    {
+      "id": "code",
+      "variant": 3,
+      "text": "Your confirmation code is spell(FD7Q2K).",
+      "ttfb_ms": 698,
+      "audio_s": 6.0,
+      "words": [
+        "Your",
+        "confirmation",
+        "code",
+        "is",
+        "spell(FD7Q2K)."
+      ],
+      "clip": "clips/pron-code-v3.wav",
+      "note": "Confirmation codes must be heard letter by letter. v1 is the raw code, v2 is the spaced form ForgeDesk ships on Coda, v3 is the spell() form ForgeDesk ships on Mist models. Rendering v3 on Coda shows why the choice is model-specific: Coda does not process spell().",
+      "shipped": false
+    },
+    {
+      "id": "time",
+      "variant": 1,
+      "text": "On Thursday afternoon I have 1 PM, 3 PM and 4 PM.",
+      "ttfb_ms": 390,
+      "audio_s": 4.72,
+      "words": [
+        "On",
+        "Thursday",
+        "afternoon",
+        "I",
+        "have",
+        "1",
+        "PM,",
+        "3",
+        "PM",
+        "and",
+        "4",
+        "PM."
+      ],
+      "clip": "clips/pron-time-v1.wav",
+      "note": "Times: digits with AM/PM vs words. ForgeDesk ships the digit form because it stays short and Rime's text normalization reads it correctly.",
+      "shipped": true
+    },
+    {
+      "id": "time",
+      "variant": 2,
+      "text": "On Thursday afternoon I have one, three and four in the afternoon.",
+      "ttfb_ms": 612,
+      "audio_s": 4.4,
+      "words": [
+        "On",
+        "Thursday",
+        "afternoon",
+        "I",
+        "have",
+        "one,",
+        "three",
+        "and",
+        "four",
+        "in",
+        "the",
+        "afternoon."
+      ],
+      "clip": "clips/pron-time-v2.wav",
+      "note": "Times: digits with AM/PM vs words. ForgeDesk ships the digit form because it stays short and Rime's text normalization reads it correctly.",
+      "shipped": false
+    },
+    {
+      "id": "leadin",
+      "variant": 1,
+      "text": "Let me check Thursday afternoon.",
+      "ttfb_ms": 610,
+      "audio_s": 1.92,
+      "words": [
+        "Let",
+        "me",
+        "check",
+        "Thursday",
+        "afternoon."
+      ],
+      "clip": "clips/pron-leadin-v1.wav",
+      "note": "Lead-in before a slow tool call. A short sentence terminated with a period is released by the chunker immediately; the ellipsis variant delays the flush and adds trailing silence before the lookup starts.",
+      "shipped": true
+    },
+    {
+      "id": "leadin",
+      "variant": 2,
+      "text": "Let me check Thursday afternoon...",
+      "ttfb_ms": 388,
+      "audio_s": 2.4,
+      "words": [
+        "Let",
+        "me",
+        "check",
+        "Thursday",
+        "afternoon..."
+      ],
+      "clip": "clips/pron-leadin-v2.wav",
+      "note": "Lead-in before a slow tool call. A short sentence terminated with a period is released by the chunker immediately; the ellipsis variant delays the flush and adds trailing silence before the lookup starts.",
+      "shipped": false
+    },
+    {
+      "id": "interrupt_ack",
+      "variant": 1,
+      "text": "Sorry, as I was saying. On Thursday afternoon I have 4 PM.",
+      "ttfb_ms": 638,
+      "audio_s": 5.12,
+      "words": [
+        "Sorry,",
+        "as",
+        "I",
+        "was",
+        "saying.",
+        "On",
+        "Thursday",
+        "afternoon",
+        "I",
+        "have",
+        "4",
+        "PM."
+      ],
+      "clip": "clips/pron-interrupt_ack-v1.wav",
+      "note": "Recovery after an empty interruption. The comma pause before resuming sounds more natural than running straight on.",
+      "shipped": true
+    },
+    {
+      "id": "interrupt_ack",
+      "variant": 2,
+      "text": "Sorry as I was saying on Thursday afternoon I have 4 PM.",
+      "ttfb_ms": 609,
+      "audio_s": 3.52,
+      "words": [
+        "Sorry",
+        "as",
+        "I",
+        "was",
+        "saying",
+        "on",
+        "Thursday",
+        "afternoon",
+        "I",
+        "have",
+        "4",
+        "PM."
+      ],
+      "clip": "clips/pron-interrupt_ack-v2.wav",
+      "note": "Recovery after an empty interruption. The comma pause before resuming sounds more natural than running straight on.",
+      "shipped": false
+    },
+    {
+      "id": "unheard_note",
+      "variant": 1,
+      "text": "Quick note, I did book Tuesday at 1 PM, code F D, Q Z 2 J.",
+      "ttfb_ms": 612,
+      "audio_s": 6.48,
+      "words": [
+        "Quick",
+        "note,",
+        "I",
+        "did",
+        "book",
+        "Tuesday",
+        "at",
+        "1",
+        "PM,",
+        "code",
+        "F",
+        "D,",
+        "Q",
+        "Z",
+        "2",
+        "J."
+      ],
+      "clip": "clips/pron-unheard_note-v1.wav",
+      "note": "Surfacing a booking the caller never heard confirmed. Leading with 'Quick note' signals a correction without sounding alarmed.",
+      "shipped": true
+    },
+    {
+      "id": "unheard_note",
+      "variant": 2,
+      "text": "I booked Tuesday at 1 PM, F D Q Z 2 J.",
+      "ttfb_ms": 651,
+      "audio_s": 4.48,
+      "words": [
+        "I",
+        "booked",
+        "Tuesday",
+        "at",
+        "1",
+        "PM,",
+        "F",
+        "D",
+        "Q",
+        "Z",
+        "2",
+        "J."
+      ],
+      "clip": "clips/pron-unheard_note-v2.wav",
+      "note": "Surfacing a booking the caller never heard confirmed. Leading with 'Quick note' signals a correction without sounding alarmed.",
+      "shipped": false
+    }
+  ]
+}
