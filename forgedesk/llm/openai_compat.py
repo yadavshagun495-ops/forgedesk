@@ -12,11 +12,14 @@ from . import LLMDone, LLMEvent, TextDelta, ToolCall
 
 
 class OpenAICompatLLM:
-    def __init__(self, api_key: str, base_url: str, model: str, temperature: float = 0.3) -> None:
+    def __init__(self, api_key: str, base_url: str, model: str, temperature: float = 0.3, http_client: Any = None) -> None:
         self.name = f"openai-compat:{model}"
         self.model = model
         self.temperature = temperature
-        self.client = AsyncOpenAI(api_key=api_key, base_url=base_url)
+        kwargs: dict[str, Any] = {"api_key": api_key, "base_url": base_url}
+        if http_client is not None:  # tests inject a mock transport here
+            kwargs["http_client"] = http_client
+        self.client = AsyncOpenAI(**kwargs)
         self.last_first_token_ms: float | None = None
 
     async def stream(

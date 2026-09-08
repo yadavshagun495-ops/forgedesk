@@ -12,7 +12,7 @@
     "alignment": "rime word timestamps (en/es) + proportional fallback"
   },
   "started_utc": "2026-09-08 04:11:10",
-  "elapsed_s": 260.2,
+  "elapsed_s": 699.6,
   "scenarios": {
     "A_interrupt_mid_speech": {
       "description": "User talks over the slot offer and changes the day. Audio must stop promptly; the ledger must know which words were heard; the new answer must be about Thursday.",
@@ -98,53 +98,53 @@
     "B_interrupt_during_tool": {
       "description": "User changes the request while a 3 s lookup is in flight. The stale lookup must never be spoken as current.",
       "claim": "Delayed tool results cannot re-enter the conversation after an interruption.",
-      "runs": 1,
-      "passed": 1,
+      "runs": 20,
+      "passed": 20,
       "checks": {
-        "script_completed": "1/1",
-        "interrupted": "1/1",
-        "audio_stopped_under_300ms": "1/1",
-        "old_lookup_orphaned_not_killed": "1/1",
-        "old_lookup_discarded_or_fenced": "1/1",
-        "stale_tuesday_result_never_spoken": "1/1",
-        "new_request_answered": "1/1",
-        "exactly_one_tuesday_lookup": "1/1"
+        "script_completed": "20/20",
+        "interrupted": "20/20",
+        "audio_stopped_under_300ms": "20/20",
+        "old_lookup_orphaned_not_killed": "20/20",
+        "old_lookup_discarded_or_fenced": "20/20",
+        "stale_tuesday_result_never_spoken": "20/20",
+        "new_request_answered": "20/20",
+        "exactly_one_tuesday_lookup": "20/20"
       },
       "stop_ms": {
-        "p50": 16.2,
-        "p95": 16.2,
-        "max": 16.2
+        "p50": 15.9,
+        "p95": 16.5,
+        "max": 16.8
       },
       "flush_ack_ms": {
-        "p50": 15.8,
-        "p95": 15.8
+        "p50": 15.4,
+        "p95": 16.1
       },
       "vad_detect_ms": {
-        "p50": 165.6,
-        "p95": 165.6
+        "p50": 163.6,
+        "p95": 165.5
       },
       "user_speech_to_audio_stop_ms": {
-        "p50": 181.8,
+        "p50": 179.6,
         "p95": 181.8
       },
       "ttfa_ms_all": {
-        "p50": 452.2,
-        "p95": 452.4,
-        "n": 2
+        "p50": 688.7,
+        "p95": 759.9,
+        "n": 40
       },
       "ttfa_ms_cold": {
         "p50": null,
         "n": 0
       },
       "ttfa_ms_warm": {
-        "p50": 452.2,
-        "p95": 452.4,
-        "n": 2
+        "p50": 688.7,
+        "p95": 759.9,
+        "n": 40
       },
       "tts_first_byte_ms": {
-        "p50": 407.8,
-        "p95": 606.9,
-        "n": 5
+        "p50": 615.2,
+        "p95": 714.0,
+        "n": 100
       },
       "stale_results_fenced_total": 0,
       "late_frames_dropped_total": 0,
@@ -153,7 +153,97 @@
       ],
       "errors": [],
       "clips": [
-        "evidence/clips/B_interrupt_during_tool-rime-00-heard-e1.wav"
+        "evidence/clips/B_interrupt_during_tool-rime-00-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-01-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-02-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-03-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-04-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-05-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-06-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-07-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-08-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-09-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-10-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-11-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-12-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-13-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-14-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-15-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-16-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-17-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-18-heard-e1.wav",
+        "evidence/clips/B_interrupt_during_tool-rime-19-heard-e1.wav"
+      ]
+    },
+    "C_status_during_tool": {
+      "description": "User asks 'are you still there?' during a 3 s lookup. The lookup must continue and its result must be reconciled, not restarted or lost.",
+      "claim": "The voice session stays responsive during tool work without losing context.",
+      "runs": 13,
+      "passed": 13,
+      "checks": {
+        "script_completed": "13/13",
+        "interrupted": "13/13",
+        "lookup_not_restarted": "13/13",
+        "result_reconciled_into_new_epoch": "13/13",
+        "status_acknowledged": "13/13",
+        "result_spoken_once_after_reconcile": "13/13"
+      },
+      "stop_ms": {
+        "p50": 15.7,
+        "p95": 16.0,
+        "max": 16.2
+      },
+      "flush_ack_ms": {
+        "p50": 15.4,
+        "p95": 15.4
+      },
+      "vad_detect_ms": {
+        "p50": 163.6,
+        "p95": 165.3
+      },
+      "user_speech_to_audio_stop_ms": {
+        "p50": 179.3,
+        "p95": 181.0
+      },
+      "ttfa_ms_all": {
+        "p50": 630.7,
+        "p95": 835.6,
+        "n": 26
+      },
+      "ttfa_ms_cold": {
+        "p50": null,
+        "n": 0
+      },
+      "ttfa_ms_warm": {
+        "p50": 630.7,
+        "p95": 835.6,
+        "n": 26
+      },
+      "tts_first_byte_ms": {
+        "p50": 605.0,
+        "p95": 716.4,
+        "n": 65
+      },
+      "stale_results_fenced_total": 0,
+      "late_frames_dropped_total": 0,
+      "alignment_methods": [
+        "word_timestamps"
+      ],
+      "errors": [],
+      "clips": [
+        "evidence/clips/C_status_during_tool-rime-00-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-01-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-02-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-03-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-04-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-05-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-06-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-07-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-08-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-09-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-10-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-11-heard-e1.wav",
+        "evidence/clips/C_status_during_tool-rime-12-heard-e1.wav"
       ]
     }
   }
