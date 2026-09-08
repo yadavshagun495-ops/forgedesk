@@ -1,5 +1,7 @@
 # The demo video
 
+**Watch: https://youtu.be/wCTvlzVX3Ew**
+
 `forgedesk-demo.mp4` (4:11) with `forgedesk-demo.srt`. Regenerate with `make demo`.
 
 ## What you are watching

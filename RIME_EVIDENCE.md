@@ -149,11 +149,16 @@ Reading the numbers:
 
 ### Live browser check
 
-The same interruption path was exercised through the real WebSocket + AudioWorklet client (typed turn, 3 s
+The demo recording (https://youtu.be/wCTvlzVX3Ew) is itself a run of the shipped path: the real client in a
+browser, the caller's audio injected through the microphone path, and all three barge-ins detected by the
+server-side VAD. The agent audio in it is captured server-side and cut at the exact sample the browser
+reached, so an interrupted response audibly stops mid-word.
+
+A separate manual check through the same WebSocket + AudioWorklet client (typed turn, 3 s
 tool delay, manual barge-in during the lead-in, then "Are you still there?"): heard =
 `Let me check Thursday`, unheard = `afternoon. Still checking.`, alignment `word_timestamps`, stop 4 ms
 (flush ack 3.7 ms on localhost), the orphaned lookup reconciled into the new epoch and its result spoken
-exactly once. The recorded demo shows this with a microphone.
+exactly once.
 
 ## Pronunciation / delivery variants
 

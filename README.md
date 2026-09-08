@@ -4,6 +4,8 @@
 ("Forge Auto Care", synthetic data). The caller is usually driving or has their hands under a bonnet, so the
 whole interaction is spoken: Rime speaks every word the agent says.
 
+**▶ Demo video (4:11): https://youtu.be/wCTvlzVX3Ew**
+
 **Hard voice problem we chose and prove:** *interruption and recovery* + *conversation continuity during
 tool work*. When the caller talks over the agent — mid-sentence, or while a slow booking-system lookup is
 in flight — the agent must (1) stop the audio promptly, (2) know *exactly which words the caller heard*,
@@ -25,8 +27,9 @@ removes the product: the entire difficulty lives in the audio timeline.
 Method, per-check breakdown and limitations: [RIME_EVIDENCE.md](RIME_EVIDENCE.md). Audio of what the caller
 actually heard before each interruption: [evidence/samples/](evidence/samples/).
 
-**Demo video:** [demo/forgedesk-demo.mp4](demo/forgedesk-demo.mp4) (4:11, captions in
-[demo/forgedesk-demo.srt](demo/forgedesk-demo.srt)). It is a recording of the real product, not a
+**Demo video:** https://youtu.be/wCTvlzVX3Ew (4:11) — also in the repo as
+[demo/forgedesk-demo.mp4](demo/forgedesk-demo.mp4) with captions in
+[demo/forgedesk-demo.srt](demo/forgedesk-demo.srt). It is a recording of the real product, not a
 recreation — see [demo/README.md](demo/README.md) for exactly what is live and what is scripted.
 Regenerate it with `make demo`.
 
@@ -246,11 +249,14 @@ PLAN.md               original work plan
 
 ## Demo
 
-[demo/forgedesk-demo.mp4](demo/forgedesk-demo.mp4) is the submitted recording: the real client driven by
-`scripts/demo/`, with the caller's voice injected through the microphone path so the barge-ins are detected
-by the same server-side VAD a live microphone triggers, and the agent's speech captured exactly as the
-browser played it (interrupted responses cut at the sample the caller reached). Narration and captions are
-Rime as well — details and the honest list of what is scripted are in [demo/README.md](demo/README.md).
+**Watch: https://youtu.be/wCTvlzVX3Ew** (4:11)
+
+[demo/forgedesk-demo.mp4](demo/forgedesk-demo.mp4) is the same recording committed to the repo: the real
+client driven by `scripts/demo/`, with the caller's voice injected through the microphone path so the
+barge-ins are detected by the same server-side VAD a live microphone triggers, and the agent's speech
+captured exactly as the browser played it (interrupted responses cut at the sample the caller reached).
+Narration and captions are Rime as well — details and the honest list of what is scripted are in
+[demo/README.md](demo/README.md).
 
 To present it live instead, see [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md). Run with `TOOL_DELAY_MS=3000`
 (or the in-UI selector) for the stress case. The active speech provider is always on screen in the header
